@@ -4,15 +4,9 @@
   "parameters": {
     "EmailID": {
       "type": "String",
-      "description": "Target email to lookup on AD",
+      "description": "Target email to look up on AD",
       "default": ""
     },
-    "Cutoffdate": {
-      "type": "String",
-      "description": "New expiry date of all matching account",
-      "default": ""
-    }
-  },
   "mainSteps": [
     {
       "action": "aws:runPowerShellScript",
@@ -21,16 +15,19 @@
         "runCommand": [
           "",
           "$email = '{{EmailID}}'",
+          "$lowercaseEmail = $email.ToLower()",
           "$domainName = (Get-WmiObject Win32_ComputerSystem).Domain",
           "$allUsers = Get-ADUser -Filter * -Properties SamAccountName, DisplayName, EmailAddress, AccountExpirationDate",
-          "$matchingUsers = $allUsers | Where-Object { $_.EmailAddress -eq $email }",
+          "$matchingUsers = $allUsers | Where-Object { $_.EmailAddress -and ($_.EmailAddress.ToLower() -eq $lowercaseEmail) }",
           "$numberOfMatches = $matchingUsers.Count",
           "Write-Host 'Target Email Address:' $email",
           "Write-Host 'Domain Name:' $domainName",
           "Write-Host 'Number of matching users:' $numberOfMatches",
           "if ($numberOfMatches -gt 0) {",
           "    Write-Host 'Usernames of matching users:'",
-          "    $matchingUsers | ForEach-Object { Write-Host $_.SamAccountName }",
+          "    $matchingUsers | ForEach-Object {",
+          "        Write-Host 'SamAccountName:' $_.SamAccountName",
+          "    }",
           "} else {",
           "    Write-Host 'No matching users found.'",
           "}",

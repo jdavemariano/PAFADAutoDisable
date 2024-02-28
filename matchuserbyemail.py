@@ -50,7 +50,7 @@ if ssm_status_response['StatusDetails'] == 'Success':
 cmd_output = ssm_status_response.get('StandardOutputContent','')
 print(f'{cmd_output}\n')
 
-with open('usermatchbyemail_logs.txt', 'w') as outfile:
+with open('matchusers_logs.txt', 'w') as outfile:
 	outfile.write(cmd_output)
 
 ssm_delete_response = ssm_client.delete_document(Name=ssm_doc_name)

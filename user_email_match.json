@@ -21,8 +21,9 @@
         "runCommand": [
           "",
           "$email = '{{EmailID}}'",
+          "$email = $email.ToUpper()",
           "$domainName = (Get-WmiObject Win32_ComputerSystem).Domain",
-          "$matchingUsers = Get-ADUser -Filter {EmailAddress -ieq $email} -Properties SamAccountName, DisplayName, EmailAddress, AccountExpirationDate",
+          "$matchingUsers = Get-ADUser -Filter { $_.EmailAddress -and ($_.EmailAddress.ToUpper() -eq $email) } -Properties SamAccountName, DisplayName, EmailAddress, AccountExpirationDate",
           "$numberOfMatches = $matchingUsers.Count",
           "Write-Host 'Target Email Address:' $email",
           "Write-Host 'Domain Name:' $domainName",

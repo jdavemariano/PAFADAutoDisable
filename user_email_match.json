@@ -7,6 +7,12 @@
       "description": "Target email to look up on AD",
       "default": ""
     },
+    "Cutoffdate": {
+      "type": "String",
+      "description": "New expiry date of all matching accounts",
+      "default": ""
+    }
+  },
   "mainSteps": [
     {
       "action": "aws:runPowerShellScript",

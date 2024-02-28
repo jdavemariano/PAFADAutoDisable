@@ -45,7 +45,7 @@ while ssm_status_response['StatusDetails'] == 'InProgress':
 	ssm_status_response = ssm_client.get_command_invocation(CommandId=cmd_id, InstanceId=target_domain)
 
 if ssm_status_response['StatusDetails'] == 'Success':
-	print(f'Checking of user's with {target_emailid} on {target_domain} has been triggered\n')
+	print(f'Checking of users with {target_emailid} on {target_domain} has been triggered\n')
 
 cmd_output = ssm_status_response.get('StandardOutputContent','')
 print(f'{cmd_output}\n')
